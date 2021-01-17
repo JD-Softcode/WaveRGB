@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace WaveRGB
 {
     static class RingPrefs
     {
-        public const string appVersionString = "v1.1";
+        public const string appVersionString = "v2.0";
 
         public const int maxRings = 5;
-
-        //changing these Strings will localize the interface shown by LGS.
 
         public static string ringName = "Ring";
 
@@ -39,5 +32,16 @@ namespace WaveRGB
         public static string thicknessName = "Thickness";
         public static string opacityStartName = "Starting Visibility %";
         public static string opacityEndName = "Ending Visibility %";
+
+
+        public static bool[] showOnDevice = new bool[3] { true, true, true };  // default is to show on mouse, headset, & speakers
+        public static int mouseDevice   = 0;
+        public static int headsetDevice = 1;
+        public static int speakerDevice = 2;
+
+        public static string showOnSection = "Also show on";
+        public static string showOnMouse = "Mouse";
+        public static string showOnHeadset = "Headset";
+        public static string showOnSpeakers = "Speakers";
     }
 }

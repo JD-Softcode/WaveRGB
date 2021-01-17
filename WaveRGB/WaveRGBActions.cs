@@ -1,5 +1,9 @@
 ﻿using LedCSharp;
+using Microsoft.Win32;
 using System;
+using System.IO;
+using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,10 +14,13 @@ namespace WaveRGB
     class WaveRGBActions
     {
         // Attributes
-        readonly string KeyboardBackgroundImage = "Images/keysBackground.png";
+        readonly string[] KeyboardBackgroundImageNames = { "Black", "Midnight", "Sunrise", "Gray", "Dark Gray" };
+        readonly string[] presetNames = { "Basic Rings", "Bolder Basic", "Firmware", "Blue Paint", "Big Color Rings", "Lava Eruption",
+            "Fireworks", "Onion Rings", "Key Pulse", "Rainbow Follower", "Ghost In The Machine" };
+        private int selectedBackgroundIndex;
+        private int selectedPresetIndex;
         ImageBrush KeyboardBackgroundPaint;
         private System.Timers.Timer animationTimer;
-        private int animationInterval = 1000 / 30;  //30 FPS
         private AnimatedCircleGroup theCircles;
         private Canvas drawCanvas;
         private Canvas keysCanvas;
@@ -24,40 +31,58 @@ namespace WaveRGB
         private double renderScaleVert;
         private int renderBytesPerPixel;
 
+        WaveRGB.SettingsWindow settingsWindow;
+
+        private readonly int[] keyToZoneMap = new int[] {
+            81,  // Q sets zone 1; on G213 zone 0 is whole keyboard; on other devices zone 0 is a specific light
+            89,  // Y sets zone 2
+            219, // [ sets zone 3
+            35,  // END sets zone 4
+            104  // KP_8 sets zone 5
+            };
+
         private const double mult8bitToPercent = 100.0 / 255.0;
 
         // Methods
-        public string StartUp()
+        public string StartUp(Canvas artCanvas)
         {
+            string LGSresult = "";
             if (LogitechGSDK.LogiLedInitWithName("Wave RGB"))
             {   //if no error...
                 System.Threading.Thread.Sleep(250); //wait for LGS to wake up
-                LoadPreferences();
-                KeyListener.StartKeyListener(this);
-                int[] version = LGSversion();
+                int[] version = GetLGSversion();
                 if (version[0] == -1)
                 {
-                    return "Successfully connected to LGS but version unknown.";
+                    LGSresult = "Successfully connected to LogiLED but version unknown.";
                 }
                 else
                 {
-                    return string.Format($"Successfully connected to LGS version {version[0]}.{version[1]}.{version[2]}.");
+                    LGSresult = string.Format($"Successfully connected to LogiLED version {version[0]}.{version[1]}.{version[2]}.");
                 }
             }
             else
             {
-                return "Failed to connect to LGS.";
+                LGSresult = "Failed to connect to LogiLED.";
             }
-
+            settingsWindow = new SettingsWindow(this);
+            settingsWindow.SetupBackgroundsMenu(KeyboardBackgroundImageNames);
+            settingsWindow.SetupPresetsMenu(presetNames);
+            LoadPreferences();
+            KeyListener.StartKeyListener(this);
+            return LGSresult;
         }
 
+        internal void windowClosing()
+        {
+            settingsWindow.Close();
+        }
 
         internal void StopLGS()
         {
             LogitechGSDK.LogiLedShutdown();
         }
 
-        internal int[] LGSversion()
+        internal int[] GetLGSversion()
         {
             int major = 0;
             int minor = 0;
@@ -70,7 +95,8 @@ namespace WaveRGB
 
         internal void LoadCanvasBackgroundImage()
         {
-            Uri uriSource = new Uri(KeyboardBackgroundImage, UriKind.Relative);
+            String pathname = "Images\\" + KeyboardBackgroundImageNames[selectedBackgroundIndex] + ".png";
+            Uri uriSource = new Uri(pathname, UriKind.Relative);
             BitmapImage anImage = new BitmapImage(uriSource);
             KeyboardBackgroundPaint = new ImageBrush(anImage);  //sets attribute
             KeyboardBackgroundPaint.TileMode = TileMode.None;
@@ -84,34 +110,178 @@ namespace WaveRGB
 
         public void LoadPreferences()
         {
-            LogitechGSDK.LogiLedGetConfigOptionNumber("Wave RGB/" + RingPrefs.renderName, ref RingPrefs.renderFPS);
-            SetAnimationInterval((int)(1000 / RingPrefs.renderFPS));
-            for (int i = 0; i < 5; i++)
+            RegistryKey userPrefs = Registry.CurrentUser.OpenSubKey("Software\\JD-Softcode\\WaveRGB", true);
+            if (userPrefs == null)
             {
-                LoadSpecificRingPref(i);
+                // Let the default values in the constructor persist.
+                selectedBackgroundIndex = 1;
+                selectedPresetIndex = 0;
+            }
+            RingPrefs.renderFPS = JsonSerializer.Deserialize<int>(userPrefs.GetValue(RingPrefs.renderName).ToString());
+            RingPrefs.active = JsonSerializer.Deserialize<bool[]>(userPrefs.GetValue(RingPrefs.activeName).ToString());
+            RingPrefs.life = JsonSerializer.Deserialize<double[]>(userPrefs.GetValue(RingPrefs.lifeName).ToString());
+            RingPrefs.delay = JsonSerializer.Deserialize<double[]>(userPrefs.GetValue(RingPrefs.delayName).ToString());
+            RingPrefs.sizeStart = JsonSerializer.Deserialize<double[]>(userPrefs.GetValue(RingPrefs.sizeStartName).ToString());
+            RingPrefs.sizeEnd = JsonSerializer.Deserialize<double[]>(userPrefs.GetValue(RingPrefs.sizeEndName).ToString());
+            RingPrefs.color = JsonSerializer.Deserialize<Color[]>(userPrefs.GetValue(RingPrefs.colorName).ToString());
+            RingPrefs.thickness = JsonSerializer.Deserialize<double[]>(userPrefs.GetValue(RingPrefs.thicknessName).ToString());
+            RingPrefs.opacityStart = JsonSerializer.Deserialize<double[]>(userPrefs.GetValue(RingPrefs.opacityStartName).ToString());
+            RingPrefs.opacityEnd = JsonSerializer.Deserialize<double[]>(userPrefs.GetValue(RingPrefs.opacityEndName).ToString());
+            RingPrefs.showOnDevice = JsonSerializer.Deserialize<bool[]>(userPrefs.GetValue(RingPrefs.showOnSection).ToString());
+            selectedBackgroundIndex = int.Parse(userPrefs.GetValue("backgroundIndex").ToString());
+            selectedPresetIndex = int.Parse(userPrefs.GetValue("presetIndex").ToString());
+            SetAnimationInterval((int)RingPrefs.renderFPS);
+            LoadCanvasBackgroundImage();
+            if (drawCanvas != null)
+            {
+                drawCanvas.Background = this.GetBackgroundImageBrush();     //needed to reset in user Cancels
             }
         }
 
-        internal void LoadSpecificRingPref(int arrayIndex)
-        {
-            string prompt = RingPrefs.ringName + " " + (arrayIndex + 1) + "/";
-            LogitechGSDK.LogiLedGetConfigOptionBool(prompt + RingPrefs.activeName, ref RingPrefs.active[arrayIndex]);
-            LogitechGSDK.LogiLedGetConfigOptionNumber(prompt + RingPrefs.lifeName, ref RingPrefs.life[arrayIndex]);
-            LogitechGSDK.LogiLedGetConfigOptionNumber(prompt + RingPrefs.delayName, ref RingPrefs.delay[arrayIndex]);
-            LogitechGSDK.LogiLedGetConfigOptionNumber(prompt + RingPrefs.sizeStartName, ref RingPrefs.sizeStart[arrayIndex]);
-            LogitechGSDK.LogiLedGetConfigOptionNumber(prompt + RingPrefs.sizeEndName, ref RingPrefs.sizeEnd[arrayIndex]);
-            int red = RingPrefs.color[arrayIndex].R;
-            int green = RingPrefs.color[arrayIndex].G;
-            int blue = RingPrefs.color[arrayIndex].B;
-            LogitechGSDK.LogiLedGetConfigOptionColor(prompt + RingPrefs.colorName, ref red, ref green, ref blue);
-            RingPrefs.color[arrayIndex].R = (byte)red;
-            RingPrefs.color[arrayIndex].G = (byte)green;
-            RingPrefs.color[arrayIndex].B = (byte)blue;
-            LogitechGSDK.LogiLedGetConfigOptionNumber(prompt + RingPrefs.thicknessName, ref RingPrefs.thickness[arrayIndex]);
-            LogitechGSDK.LogiLedGetConfigOptionNumber(prompt + RingPrefs.opacityStartName, ref RingPrefs.opacityStart[arrayIndex]);
-            LogitechGSDK.LogiLedGetConfigOptionNumber(prompt + RingPrefs.opacityEndName, ref RingPrefs.opacityEnd[arrayIndex]);
+        public void UpdatePreferences()
+        {   //This is called when user clicks the main window button
+            settingsWindow.framerateTextbox.Text = RingPrefs.renderFPS.ToString();
+            for (int i = 0; i < RingPrefs.maxRings; i++)
+            {
+                int j = i + 1;
+                (settingsWindow.FindName("ringActiveCheckbox" + j) as CheckBox).IsChecked = RingPrefs.active[i];
+                (settingsWindow.FindName("lifetimeTextbox" + j)    as TextBox).Text = RingPrefs.life[i].ToString();
+                (settingsWindow.FindName("renderDelayTextbox" + j) as TextBox).Text = RingPrefs.delay[i].ToString();
+                (settingsWindow.FindName("startRadiusTextbox" + j) as TextBox).Text = RingPrefs.sizeStart[i].ToString();
+                (settingsWindow.FindName("endRadiusTextbox" + j)   as TextBox).Text = RingPrefs.sizeEnd[i].ToString();
+                (settingsWindow.FindName("redColorTextbox" + j)    as TextBox).Text = RingPrefs.color[i].R.ToString();
+                (settingsWindow.FindName("greenColorTextbox" + j)  as TextBox).Text = RingPrefs.color[i].G.ToString();
+                (settingsWindow.FindName("blueColorTextbox" + j)   as TextBox).Text = RingPrefs.color[i].B.ToString();
+                (settingsWindow.FindName("thicknessTextbox" + j)   as TextBox).Text = RingPrefs.thickness[i].ToString();
+                (settingsWindow.FindName("startVisibilityTextbox" + j) as TextBox).Text = RingPrefs.opacityStart[i].ToString();
+                (settingsWindow.FindName("endVisibilityTextbox" + j)   as TextBox).Text = RingPrefs.opacityEnd[i].ToString();
+                settingsWindow.refreshColors();
+            }
+            settingsWindow.mouseLightCheckbox.IsChecked   = RingPrefs.showOnDevice[RingPrefs.mouseDevice];
+            settingsWindow.headsetLightCheckbox.IsChecked = RingPrefs.showOnDevice[RingPrefs.headsetDevice];
+            settingsWindow.speakerLightCheckbox.IsChecked = RingPrefs.showOnDevice[RingPrefs.speakerDevice];
+            settingsWindow.backgroundMenu.SelectedIndex   = selectedBackgroundIndex;
+            settingsWindow.ringPresetsMenu.SelectedIndex  = selectedPresetIndex;
+            settingsWindow.Show();
         }
 
+        internal void reloadPreferences()
+        {
+            LoadPreferences();
+        }
+
+        internal void SavePreferences()
+        {
+            RegistryKey userPrefs = Registry.CurrentUser.OpenSubKey("Software\\JD-Softcode\\WaveRGB", true);
+            if (userPrefs == null)
+            {
+                RegistryKey newKey = Registry.CurrentUser.CreateSubKey("Software\\JD-Softcode", true);
+                userPrefs = newKey.CreateSubKey("WaveRGB");
+            }
+            userPrefs.SetValue(RingPrefs.renderName,        JsonSerializer.Serialize(RingPrefs.renderFPS));
+            userPrefs.SetValue(RingPrefs.activeName,        JsonSerializer.Serialize(RingPrefs.active));
+            userPrefs.SetValue(RingPrefs.lifeName,          JsonSerializer.Serialize(RingPrefs.life));
+            userPrefs.SetValue(RingPrefs.delayName,         JsonSerializer.Serialize(RingPrefs.delay));
+            userPrefs.SetValue(RingPrefs.sizeStartName,     JsonSerializer.Serialize(RingPrefs.sizeStart));
+            userPrefs.SetValue(RingPrefs.sizeEndName,       JsonSerializer.Serialize(RingPrefs.sizeEnd));
+            userPrefs.SetValue(RingPrefs.colorName,         JsonSerializer.Serialize(RingPrefs.color));
+            userPrefs.SetValue(RingPrefs.thicknessName,     JsonSerializer.Serialize(RingPrefs.thickness));
+            userPrefs.SetValue(RingPrefs.opacityStartName,  JsonSerializer.Serialize(RingPrefs.opacityStart));
+            userPrefs.SetValue(RingPrefs.opacityEndName,    JsonSerializer.Serialize(RingPrefs.opacityEnd));
+            userPrefs.SetValue(RingPrefs.showOnSection,     JsonSerializer.Serialize(RingPrefs.showOnDevice));
+            userPrefs.SetValue("backgroundIndex", selectedBackgroundIndex);
+            userPrefs.SetValue("presetIndex", selectedPresetIndex);
+        }
+
+        public void ActiveCheckSettingChanged(int ringNum, bool data)
+        {
+            RingPrefs.active[ringNum-1] = data;
+            settingsWindow.ringPresetsMenu.SelectedIndex = selectedPresetIndex = 0;  // "Custom" preset 
+        }
+
+        public void PeripheralCheckSettingChanged(int arrayIndex, bool data)
+        {
+            RingPrefs.showOnDevice[arrayIndex] = data;
+        }
+
+        public void ChangeBackground(int newIndex)
+        {
+            selectedBackgroundIndex = newIndex;
+            LoadCanvasBackgroundImage();
+            //if (mainWindowCanvas != null)       // get called at startup
+            if (drawCanvas != null)       // get called at startup
+            {
+                //mainWindowCanvas.Background = this.GetBackgroundImageBrush();
+                drawCanvas.Background = this.GetBackgroundImageBrush();
+            }
+        }
+
+        public void ChangeRingsPreset(int newIndex) {
+            selectedPresetIndex = newIndex;
+            string searchString = presetNames[newIndex-1];     // index 0 is "Custom" on menu; 1 is first preset name
+            string[] lines = File.ReadAllLines(path: "Resources\\presets.txt", encoding: Encoding.UTF8);
+            for (int i=0; i<lines.Length; i++)
+            {
+                if (lines[i] == searchString) {
+                    RingPrefs.active       = JsonSerializer.Deserialize<bool[]>(lines[i+1]);
+                    RingPrefs.life         = JsonSerializer.Deserialize<double[]>(lines[i+2]);
+                    RingPrefs.delay        = JsonSerializer.Deserialize<double[]>(lines[i+3]);
+                    RingPrefs.sizeStart    = JsonSerializer.Deserialize<double[]>(lines[i+4]);
+                    RingPrefs.sizeEnd      = JsonSerializer.Deserialize<double[]>(lines[i+5]);
+                    RingPrefs.color        = JsonSerializer.Deserialize<Color[]>(lines[i+6]);
+                    RingPrefs.thickness    = JsonSerializer.Deserialize<double[]>(lines[i+7]);
+                    RingPrefs.opacityStart = JsonSerializer.Deserialize<double[]>(lines[i+8]);
+                    RingPrefs.opacityEnd   = JsonSerializer.Deserialize<double[]>(lines[i+9]);
+                    break;
+                }
+            }
+            UpdatePreferences();
+        }
+
+        public void TextSettingChanged(int ringNum, String setting, int value, bool changePresetMenuToCustom)
+        {
+            ringNum--;  // change ring number to array index
+            switch (setting)
+            {
+                case "framerate":
+                    RingPrefs.renderFPS = value;
+                    SetAnimationInterval(value);
+                    break;
+                case "lifetimeTextbox":
+                    RingPrefs.life[ringNum] = value;
+                    break;
+                case "renderDelayTextbox":
+                    RingPrefs.delay[ringNum] = value;
+                    break;
+                case "startRadiusTextbox":
+                    RingPrefs.sizeStart[ringNum] = value;
+                    break;
+                case "endRadiusTextbox":
+                    RingPrefs.sizeEnd[ringNum] = value;
+                    break;
+                case "redColorTextbox":
+                    RingPrefs.color[ringNum].R = (byte)value;
+                    break;
+                case "greenColorTextbox":
+                    RingPrefs.color[ringNum].G = (byte)value;
+                    break;
+                case "blueColorTextbox":
+                    RingPrefs.color[ringNum].B = (byte)value;
+                    break;
+                case "thicknessTextbox":
+                    RingPrefs.thickness[ringNum] = value;
+                    break;
+                case "startVisibilityTextbox":
+                    RingPrefs.opacityStart[ringNum] = value;
+                    break;
+                case "endVisibilityTextbox":
+                    RingPrefs.opacityEnd[ringNum] = value;
+                    break;
+            }
+            if (setting != "framerate" && changePresetMenuToCustom) {
+                settingsWindow.ringPresetsMenu.SelectedIndex = selectedPresetIndex = 0;
+            }
+        }
 
         public ImageBrush GetBackgroundImageBrush()
         {
@@ -153,7 +323,7 @@ namespace WaveRGB
 
         public void InitializeAnimation(Canvas whereToDraw)
         {
-            animationTimer = new System.Timers.Timer(animationInterval);
+            animationTimer = new System.Timers.Timer(1000 / RingPrefs.renderFPS);
             animationTimer.Elapsed += AnimationStep;    // the method to be called
             animationTimer.AutoReset = true;
             animationTimer.Enabled = true;
@@ -165,9 +335,8 @@ namespace WaveRGB
 
         public void SetAnimationInterval(int newValue)
         {
-            animationInterval = newValue;
             if (animationTimer != null) {
-                animationTimer.Interval = animationInterval;
+                animationTimer.Interval = 1000 / newValue;
             }
         }
 
@@ -191,7 +360,7 @@ namespace WaveRGB
         {
             animationTimer.Enabled = false;
             //allow queued canvas updates to play out to avoid app crash on exit (only in debugger?)
-            System.Threading.Thread.Sleep(2 * animationInterval);
+            System.Threading.Thread.Sleep(2 * (int)RingPrefs.renderFPS);
         }
 
 
@@ -224,12 +393,36 @@ namespace WaveRGB
                 switch (KeyboardInfo.keyLocations[i, KeyboardInfo.key_WinCode])
                 {
                     case KeyboardInfo.specialLogiKey:   // logo, badge, and G-keys
-                        LogitechGSDK.LogiLedSetLightingForKeyWithKeyName((keyboardNames) KeyboardInfo.keyLocations[i, KeyboardInfo.key_HIDcode], red, green, blue);
+                        LogitechGSDK.LogiLedSetLightingForKeyWithKeyName((keyboardNames)KeyboardInfo.keyLocations[i, KeyboardInfo.key_HIDcode], red, green, blue);
                         break;
                     case KeyboardInfo.mediaKey:
                         break;                          // media keys have no controllable lights on G910
                     default:
                         LogitechGSDK.LogiLedSetLightingForKeyWithHidCode(KeyboardInfo.keyLocations[i, KeyboardInfo.key_HIDcode], red, green, blue);
+                    // above three cases handle all per-key RGB device lighting. Next section is for zone devices
+                        for (int j = 0; j < 5; j++) { 
+                            if (keyToZoneMap[j] == KeyboardInfo.keyLocations[i, KeyboardInfo.key_WinCode]) {
+                                //if the color is being set on one of my 5 trigger keys for zone lighting, set the zone lighting
+                                LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_RGB);
+                                LogitechGSDK.LogiLedSetLightingForTargetZone(DeviceType.Keyboard, j+1, red, green, blue);  //zone 0 is entire G213; zone 1-5 set light colors
+                                //assignment of trigger keys to set non-keyboard device colors is arbitrary; just did easy thing
+                                if (RingPrefs.showOnDevice[RingPrefs.speakerDevice]) {
+                                    LogitechGSDK.LogiLedSetLightingForTargetZone(DeviceType.Speaker, j, red, green, blue); //zone 4 doesn't exist but slower to if/then around it
+                                }
+                                if (j < 2)  // these devices have only 2 zones (0 and 1)
+                                {
+                                    if (RingPrefs.showOnDevice[RingPrefs.headsetDevice])
+                                    {
+                                        LogitechGSDK.LogiLedSetLightingForTargetZone(DeviceType.Headset, j, red, green, blue);
+                                    }
+                                    if (RingPrefs.showOnDevice[RingPrefs.mouseDevice])
+                                    {
+                                        LogitechGSDK.LogiLedSetLightingForTargetZone(DeviceType.Mouse, j, red, green, blue);
+                                    }
+                                }
+                                LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_PERKEY_RGB);
+                            }
+                        }
                         break;
                 }
             }

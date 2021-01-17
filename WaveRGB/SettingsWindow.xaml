@@ -1,0 +1,197 @@
+﻿<Window x:Name="SettingsWindow1" x:Class="WaveRGB.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WaveRGB"
+        mc:Ignorable="d"
+        Title="Ring Settings" Height="420" Width="1125" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Grid Margin="0,0,0,0">
+        <TextBox x:Name="framerateTextbox" HorizontalAlignment="Left" Margin="118,14,0,0" Text="15" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,60" GotFocus="Textbox_GotFocus"/>
+        <Label Content="Animation speed:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="27"/>
+        <Image HorizontalAlignment="Left" Height="50" Margin="707,344,0,0" VerticalAlignment="Top" Width="50" Source="/Resources/colorSpectrum.PNG" Visibility="Hidden"/>
+
+        <Grid x:Name="ring1Grid" HorizontalAlignment="Left" Height="301" Margin="10,42,0,0" VerticalAlignment="Top" Width="211">
+            <CheckBox x:Name="ringActiveCheckbox1" Content="Active" HorizontalAlignment="Left" Margin="15,28,0,0" VerticalAlignment="Top" Click="activeCheckbox_Click"/>
+            <Label Content="Life time" HorizontalAlignment="Left" Margin="11,48,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="lifetimeTextbox1" HorizontalAlignment="Left" Margin="125,51,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,999" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,48,0,0" VerticalAlignment="Top"/>
+            <Rectangle x:Name="colorSampleRect1" Fill="#FF3AD32B" HorizontalAlignment="Left" Height="18" Margin="71,153,0,0" Stroke="Black" VerticalAlignment="Top" Width="130"/>
+            <Label Content="Render Delay" HorizontalAlignment="Left" Margin="11,71,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="renderDelayTextbox1" HorizontalAlignment="Left" Margin="125,74,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,200" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,71,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting radius" HorizontalAlignment="Left" Margin="11,94,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startRadiusTextbox1" HorizontalAlignment="Left" Margin="125,97,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,94,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending radius" HorizontalAlignment="Left" Margin="11,117,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endRadiusTextbox1" HorizontalAlignment="Left" Margin="125,120,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,117,0,0" VerticalAlignment="Top"/>
+            <Label Content="Color" HorizontalAlignment="Left" Margin="11,147,0,0" VerticalAlignment="Top"/>
+            <Label Content="Red" HorizontalAlignment="Left" Margin="42,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="redColorTextbox1" HorizontalAlignment="Left" Margin="71,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Grn" HorizontalAlignment="Left" Margin="97,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="greenColorTextbox1" HorizontalAlignment="Left" Margin="125,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Blu" HorizontalAlignment="Left" Margin="150,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="blueColorTextbox1" HorizontalAlignment="Left" Margin="175,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Thickness" HorizontalAlignment="Left" Margin="11,205,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="thicknessTextbox1" HorizontalAlignment="Left" Margin="125,208,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,205,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting Visibility" HorizontalAlignment="Left" Margin="11,231,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startVisibilityTextbox1" HorizontalAlignment="Left" Margin="125,234,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending Visibility" HorizontalAlignment="Left" Margin="11,257,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endVisibilityTextbox1" HorizontalAlignment="Left" Margin="125,260,0,0" Text="100" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,257,0,0" VerticalAlignment="Top"/>
+            <GroupBox Header="Ring 1" HorizontalAlignment="Left" Height="288" VerticalAlignment="Top" Width="211"/>
+        </Grid>
+
+        <Grid x:Name="ring2Grid" HorizontalAlignment="Left" Height="301" Margin="230,42,0,0" VerticalAlignment="Top" Width="211">
+            <CheckBox x:Name="ringActiveCheckbox2" Content="Active" HorizontalAlignment="Left" Margin="15,28,0,0" VerticalAlignment="Top" Click="activeCheckbox_Click"/>
+            <Label Content="Life time" HorizontalAlignment="Left" Margin="11,48,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="lifetimeTextbox2" HorizontalAlignment="Left" Margin="125,51,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,999" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,48,0,0" VerticalAlignment="Top"/>
+            <Rectangle x:Name="colorSampleRect2" Fill="#FF3AD32B" HorizontalAlignment="Left" Height="18" Margin="71,153,0,0" Stroke="Black" VerticalAlignment="Top" Width="130"/>
+            <Label Content="Render Delay" HorizontalAlignment="Left" Margin="11,71,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="renderDelayTextbox2" HorizontalAlignment="Left" Margin="125,74,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,200" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,71,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting radius" HorizontalAlignment="Left" Margin="11,94,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startRadiusTextbox2" HorizontalAlignment="Left" Margin="125,97,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,94,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending radius" HorizontalAlignment="Left" Margin="11,117,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endRadiusTextbox2" HorizontalAlignment="Left" Margin="125,120,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,117,0,0" VerticalAlignment="Top"/>
+            <Label Content="Color" HorizontalAlignment="Left" Margin="11,147,0,0" VerticalAlignment="Top"/>
+            <Label Content="Red" HorizontalAlignment="Left" Margin="42,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="redColorTextbox2" HorizontalAlignment="Left" Margin="71,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Grn" HorizontalAlignment="Left" Margin="97,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="greenColorTextbox2" HorizontalAlignment="Left" Margin="125,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Blu" HorizontalAlignment="Left" Margin="150,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="blueColorTextbox2" HorizontalAlignment="Left" Margin="175,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Thickness" HorizontalAlignment="Left" Margin="11,205,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="thicknessTextbox2" HorizontalAlignment="Left" Margin="125,208,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,205,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting Visibility" HorizontalAlignment="Left" Margin="11,231,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startVisibilityTextbox2" HorizontalAlignment="Left" Margin="125,234,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending Visibility" HorizontalAlignment="Left" Margin="11,257,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endVisibilityTextbox2" HorizontalAlignment="Left" Margin="125,260,0,0" Text="100" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,257,0,0" VerticalAlignment="Top"/>
+            <GroupBox Header="Ring 2" HorizontalAlignment="Left" Height="288" VerticalAlignment="Top" Width="211"/>
+        </Grid>
+
+        <Grid x:Name="ring3Grid" HorizontalAlignment="Left" Height="301" Margin="450,42,0,0" VerticalAlignment="Top" Width="211">
+            <CheckBox x:Name="ringActiveCheckbox3" Content="Active" HorizontalAlignment="Left" Margin="15,28,0,0" VerticalAlignment="Top" Click="activeCheckbox_Click"/>
+            <Label Content="Life time" HorizontalAlignment="Left" Margin="11,48,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="lifetimeTextbox3" HorizontalAlignment="Left" Margin="125,51,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,999" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,48,0,0" VerticalAlignment="Top"/>
+            <Rectangle x:Name="colorSampleRect3" Fill="#FF3AD32B" HorizontalAlignment="Left" Height="18" Margin="71,153,0,0" Stroke="Black" VerticalAlignment="Top" Width="130"/>
+            <Label Content="Render Delay" HorizontalAlignment="Left" Margin="11,71,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="renderDelayTextbox3" HorizontalAlignment="Left" Margin="125,74,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,200" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,71,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting radius" HorizontalAlignment="Left" Margin="11,94,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startRadiusTextbox3" HorizontalAlignment="Left" Margin="125,97,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,94,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending radius" HorizontalAlignment="Left" Margin="11,117,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endRadiusTextbox3" HorizontalAlignment="Left" Margin="125,120,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,117,0,0" VerticalAlignment="Top"/>
+            <Label Content="Color" HorizontalAlignment="Left" Margin="11,147,0,0" VerticalAlignment="Top"/>
+            <Label Content="Red" HorizontalAlignment="Left" Margin="42,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="redColorTextbox3" HorizontalAlignment="Left" Margin="71,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Grn" HorizontalAlignment="Left" Margin="97,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="greenColorTextbox3" HorizontalAlignment="Left" Margin="125,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Blu" HorizontalAlignment="Left" Margin="150,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="blueColorTextbox3" HorizontalAlignment="Left" Margin="175,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Thickness" HorizontalAlignment="Left" Margin="11,205,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="thicknessTextbox3" HorizontalAlignment="Left" Margin="125,208,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,205,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting Visibility" HorizontalAlignment="Left" Margin="11,231,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startVisibilityTextbox3" HorizontalAlignment="Left" Margin="125,234,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending Visibility" HorizontalAlignment="Left" Margin="11,257,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endVisibilityTextbox3" HorizontalAlignment="Left" Margin="125,260,0,0" Text="100" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,257,0,0" VerticalAlignment="Top"/>
+            <GroupBox Header="Ring 3" HorizontalAlignment="Left" Height="288" VerticalAlignment="Top" Width="211"/>
+        </Grid>
+
+        <Grid x:Name="ring4Grid" HorizontalAlignment="Left" Height="301" Margin="670,42,0,0" VerticalAlignment="Top" Width="211">
+            <CheckBox x:Name="ringActiveCheckbox4" Content="Active" HorizontalAlignment="Left" Margin="15,28,0,0" VerticalAlignment="Top" Click="activeCheckbox_Click"/>
+            <Label Content="Life time" HorizontalAlignment="Left" Margin="11,48,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="lifetimeTextbox4" HorizontalAlignment="Left" Margin="125,51,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,999" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,48,0,0" VerticalAlignment="Top"/>
+            <Rectangle x:Name="colorSampleRect4" Fill="#FF3AD32B" HorizontalAlignment="Left" Height="18" Margin="71,153,0,0" Stroke="Black" VerticalAlignment="Top" Width="130"/>
+            <Label Content="Render Delay" HorizontalAlignment="Left" Margin="11,71,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="renderDelayTextbox4" HorizontalAlignment="Left" Margin="125,74,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,200" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,71,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting radius" HorizontalAlignment="Left" Margin="11,94,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startRadiusTextbox4" HorizontalAlignment="Left" Margin="125,97,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,94,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending radius" HorizontalAlignment="Left" Margin="11,117,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endRadiusTextbox4" HorizontalAlignment="Left" Margin="125,120,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,117,0,0" VerticalAlignment="Top"/>
+            <Label Content="Color" HorizontalAlignment="Left" Margin="11,147,0,0" VerticalAlignment="Top"/>
+            <Label Content="Red" HorizontalAlignment="Left" Margin="42,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="redColorTextbox4" HorizontalAlignment="Left" Margin="71,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Grn" HorizontalAlignment="Left" Margin="97,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="greenColorTextbox4" HorizontalAlignment="Left" Margin="125,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Blu" HorizontalAlignment="Left" Margin="150,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="blueColorTextbox4" HorizontalAlignment="Left" Margin="175,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Thickness" HorizontalAlignment="Left" Margin="11,205,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="thicknessTextbox4" HorizontalAlignment="Left" Margin="125,208,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,205,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting Visibility" HorizontalAlignment="Left" Margin="11,231,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startVisibilityTextbox4" HorizontalAlignment="Left" Margin="125,234,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending Visibility" HorizontalAlignment="Left" Margin="11,257,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endVisibilityTextbox4" HorizontalAlignment="Left" Margin="125,260,0,0" Text="100" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,257,0,0" VerticalAlignment="Top"/>
+            <GroupBox Header="Ring 4" HorizontalAlignment="Left" Height="288" VerticalAlignment="Top" Width="211"/>
+        </Grid>
+
+        <Grid x:Name="ring5Grid" HorizontalAlignment="Left" Height="301" Margin="890,42,0,0" VerticalAlignment="Top" Width="211">
+            <CheckBox x:Name="ringActiveCheckbox5" Content="Active" HorizontalAlignment="Left" Margin="15,28,0,0" VerticalAlignment="Top" Click="activeCheckbox_Click"/>
+            <Label Content="Life time" HorizontalAlignment="Left" Margin="11,48,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="lifetimeTextbox5" HorizontalAlignment="Left" Margin="125,51,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,999" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,48,0,0" VerticalAlignment="Top"/>
+            <Rectangle x:Name="colorSampleRect5" Fill="#FF3AD32B" HorizontalAlignment="Left" Height="18" Margin="71,153,0,0" Stroke="Black" VerticalAlignment="Top" Width="130"/>
+            <Label Content="Render Delay" HorizontalAlignment="Left" Margin="11,71,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="renderDelayTextbox5" HorizontalAlignment="Left" Margin="125,74,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,200" GotFocus="Textbox_GotFocus"/>
+            <Label Content="frames" HorizontalAlignment="Left" Margin="155,71,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting radius" HorizontalAlignment="Left" Margin="11,94,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startRadiusTextbox5" HorizontalAlignment="Left" Margin="125,97,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,94,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending radius" HorizontalAlignment="Left" Margin="11,117,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endRadiusTextbox5" HorizontalAlignment="Left" Margin="125,120,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,117,0,0" VerticalAlignment="Top"/>
+            <Label Content="Color" HorizontalAlignment="Left" Margin="11,147,0,0" VerticalAlignment="Top"/>
+            <Label Content="Red" HorizontalAlignment="Left" Margin="42,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="redColorTextbox5" HorizontalAlignment="Left" Margin="71,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Grn" HorizontalAlignment="Left" Margin="97,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="greenColorTextbox5" HorizontalAlignment="Left" Margin="125,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Blu" HorizontalAlignment="Left" Margin="150,174,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="blueColorTextbox5" HorizontalAlignment="Left" Margin="175,178,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,255" GotFocus="Textbox_GotFocus"/>
+            <Label Content="Thickness" HorizontalAlignment="Left" Margin="11,205,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="thicknessTextbox5" HorizontalAlignment="Left" Margin="125,208,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="1,300" GotFocus="Textbox_GotFocus"/>
+            <Label Content="pixels" HorizontalAlignment="Left" Margin="155,205,0,0" VerticalAlignment="Top"/>
+            <Label Content="Starting Visibility" HorizontalAlignment="Left" Margin="11,231,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="startVisibilityTextbox5" HorizontalAlignment="Left" Margin="125,234,0,0" Text="30" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Ending Visibility" HorizontalAlignment="Left" Margin="11,257,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="endVisibilityTextbox5" HorizontalAlignment="Left" Margin="125,260,0,0" Text="100" VerticalAlignment="Top" Width="26" KeyUp="Textbox_KeyUp" RenderTransformOrigin="0,100" GotFocus="Textbox_GotFocus"/>
+            <Label Content="%" HorizontalAlignment="Left" Margin="155,257,0,0" VerticalAlignment="Top"/>
+            <GroupBox Header="Ring 5" HorizontalAlignment="Left" Height="288" VerticalAlignment="Top" Width="211"/>
+        </Grid>
+        <Label Content="frames per second" HorizontalAlignment="Left" Margin="146,10,0,0" VerticalAlignment="Top" Height="27"/>
+        <ComboBox x:Name="ringPresetsMenu" HorizontalAlignment="Left" Margin="914,12,0,0" VerticalAlignment="Top" Width="165" SelectionChanged="RingPresetsMenu_SelectionChanged" IsTabStop="False" Focusable="False"/>
+        <Label Content="Rings preset:" HorizontalAlignment="Left" Margin="835,10,0,0" VerticalAlignment="Top" Height="27"/>
+        <ComboBox x:Name="backgroundMenu" HorizontalAlignment="Left" Margin="119,345,0,0" VerticalAlignment="Top" Width="165" SelectionChanged="BackgroundMenu_SelectionChanged" SelectedIndex="0" IsTabStop="False" Focusable="False"/>
+
+        <Label Content="Background color:" HorizontalAlignment="Left" Margin="10,343,0,0" VerticalAlignment="Top" Height="27"/>
+        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="1004,346,0,0" VerticalAlignment="Top" Width="75" Click="CancelButton_Click" IsCancel="True"/>
+        <Button x:Name="okButton" Content="OK" HorizontalAlignment="Left" Margin="924,346,0,0" VerticalAlignment="Top" Width="75" IsDefault="True" Click="OkButton_Click"/>
+        <Label Content="Also show on:" HorizontalAlignment="Left" Margin="400,343,0,0" VerticalAlignment="Top" Height="27"/>
+        <CheckBox x:Name="mouseLightCheckbox" Content="Mouse" HorizontalAlignment="Left" Margin="488,349,0,0" VerticalAlignment="Top" Click="peripheralCheckbox_click"/>
+        <CheckBox x:Name="headsetLightCheckbox" Content="Headset" HorizontalAlignment="Left" Margin="558,349,0,0" VerticalAlignment="Top" Click="peripheralCheckbox_click"/>
+        <CheckBox x:Name="speakerLightCheckbox" Content="Speakers" HorizontalAlignment="Left" Margin="633,349,0,0" VerticalAlignment="Top" Click="peripheralCheckbox_click"/>
+
+    </Grid>
+</Window>
