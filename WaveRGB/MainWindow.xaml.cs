@@ -17,15 +17,15 @@ namespace WaveRGB
         {
             InitializeComponent();
             theApp = new WaveRGBActions();
-            StatusText.Content = theApp.StartUp(artCanvas);
+            StatusText.Content = theApp.StartUp(this);// artCanvas);
             bottomText.Content = RingPrefs.appVersionString + "  " + bottomText.Content;
          }
 
         private void ArtCanvas_Loaded(object sender, RoutedEventArgs e)
         {
             Canvas canvas = (Canvas)sender;
-            theApp.LoadCanvasBackgroundImage();
-            canvas.Background = theApp.GetBackgroundImageBrush();
+            theApp.StartupBackgroundImage();
+            canvas.Background = theApp.GetBackgroundBrush();
             theApp.InitializeAnimation(canvas);
         }
 
@@ -36,12 +36,22 @@ namespace WaveRGB
             theApp.DoCanvasClick(parentCanvas, startPoint);
         }
 
+        // Closing is raised when Close is called, if a window's Close button is clicked, or if the user presses ALT+F4.
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Hide();
+            ShowInTaskbar = false; // makes this not appear when alt-tabbing
+            e.Cancel = true; // keeps this window open
+        }
+
+        public void TerminateApp() { 
             KeyListener.StopKeyListener();
             theApp.HaltAnimation();
             theApp.StopLGS();
-            theApp.windowClosing();
+            theApp.WindowClosing(); // closes settings window and other clean up
+            Close();
+            Application.Current.Shutdown();
+
         }
 
         private void SettingsUpdateBtn_Click(object sender, RoutedEventArgs e)
@@ -49,5 +59,15 @@ namespace WaveRGB
             theApp.UpdatePreferences();
         }
 
+        private void Window_Activated(object sender, System.EventArgs e)
+        {
+            Show();
+            ShowInTaskbar = true;
+        }
+
+        private void QuitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            TerminateApp();
+        }
     }
 }

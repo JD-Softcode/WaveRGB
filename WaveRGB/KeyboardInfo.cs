@@ -40,7 +40,7 @@ namespace WaveRGB
             {0x46,44,683,row1},//print screen
             {0x47,145,722,row1},//scroll lock
             {0x48,19,761,row1},//pause
-                
+
             {0x35,192,80,row2},//~
             {0x1E,49,120,row2},//1
             {0x1F,50,159,row2},//2

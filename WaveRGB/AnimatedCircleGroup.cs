@@ -7,6 +7,8 @@ namespace WaveRGB
     {
         public List<AnimatedCircle> theCircles = new List<AnimatedCircle>();
 
+        public bool drawLineOnly = false;
+
         public void Add(AnimatedCircle newCircle)
         {
             theCircles.Add(newCircle);
@@ -40,7 +42,7 @@ namespace WaveRGB
             Canvas everything = new Canvas();
             foreach (AnimatedCircle circ in theCircles)
             {
-                everything.Children.Add(circ.GetCircCanvas());
+                everything.Children.Add(circ.GetCircCanvas(drawLineOnly));
             }
             return everything;
         }

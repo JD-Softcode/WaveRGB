@@ -183,15 +183,16 @@
         <Label Content="frames per second" HorizontalAlignment="Left" Margin="146,10,0,0" VerticalAlignment="Top" Height="27"/>
         <ComboBox x:Name="ringPresetsMenu" HorizontalAlignment="Left" Margin="914,12,0,0" VerticalAlignment="Top" Width="165" SelectionChanged="RingPresetsMenu_SelectionChanged" IsTabStop="False" Focusable="False"/>
         <Label Content="Rings preset:" HorizontalAlignment="Left" Margin="835,10,0,0" VerticalAlignment="Top" Height="27"/>
-        <ComboBox x:Name="backgroundMenu" HorizontalAlignment="Left" Margin="119,345,0,0" VerticalAlignment="Top" Width="165" SelectionChanged="BackgroundMenu_SelectionChanged" SelectedIndex="0" IsTabStop="False" Focusable="False"/>
+        <ComboBox x:Name="backgroundMenu" HorizontalAlignment="Left" Margin="119,345,0,0" VerticalAlignment="Top" Width="165" SelectionChanged="BackgroundMenu_SelectionChanged" SelectedIndex="0" IsTabStop="False" Focusable="False" DropDownClosed="BackgroundMenu_DropdownClosed"/>
 
         <Label Content="Background color:" HorizontalAlignment="Left" Margin="10,343,0,0" VerticalAlignment="Top" Height="27"/>
         <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="1004,346,0,0" VerticalAlignment="Top" Width="75" Click="CancelButton_Click" IsCancel="True"/>
         <Button x:Name="okButton" Content="OK" HorizontalAlignment="Left" Margin="924,346,0,0" VerticalAlignment="Top" Width="75" IsDefault="True" Click="OkButton_Click"/>
-        <Label Content="Also show on:" HorizontalAlignment="Left" Margin="400,343,0,0" VerticalAlignment="Top" Height="27"/>
+        <Label Content="Flash lights on:" HorizontalAlignment="Left" Margin="396,343,0,0" VerticalAlignment="Top" Height="27"/>
         <CheckBox x:Name="mouseLightCheckbox" Content="Mouse" HorizontalAlignment="Left" Margin="488,349,0,0" VerticalAlignment="Top" Click="peripheralCheckbox_click"/>
         <CheckBox x:Name="headsetLightCheckbox" Content="Headset" HorizontalAlignment="Left" Margin="558,349,0,0" VerticalAlignment="Top" Click="peripheralCheckbox_click"/>
         <CheckBox x:Name="speakerLightCheckbox" Content="Speakers" HorizontalAlignment="Left" Margin="633,349,0,0" VerticalAlignment="Top" Click="peripheralCheckbox_click"/>
+        <CheckBox x:Name="showAsRowsCheckbox" Content="Show as rows" HorizontalAlignment="Left" Margin="724,16,0,0" VerticalAlignment="Top" Click="ShowAsRowsCheckbox_Click"/>
 
     </Grid>
 </Window>

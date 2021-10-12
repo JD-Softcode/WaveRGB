@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WaveRGBPrefs.Properties
+namespace WaveRGB.Properties
 {
 
 

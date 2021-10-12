@@ -4,13 +4,13 @@ namespace WaveRGB
 {
     static class RingPrefs
     {
-        public const string appVersionString = "v2.0";
+        public const string appVersionString = "v2.2";
 
         public const int maxRings = 5;
 
         public static string ringName = "Ring";
 
-        public static double renderFPS = 30;
+        public static double renderFPS = 40;
         public static string renderName = "Frame Rate";
                                                                  // these default values will be returned / retained by LGS
         public static bool[] active         = new bool[maxRings]    { true, true, false, false, true };
@@ -32,7 +32,6 @@ namespace WaveRGB
         public static string thicknessName = "Thickness";
         public static string opacityStartName = "Starting Visibility %";
         public static string opacityEndName = "Ending Visibility %";
-
 
         public static bool[] showOnDevice = new bool[3] { true, true, true };  // default is to show on mouse, headset, & speakers
         public static int mouseDevice   = 0;

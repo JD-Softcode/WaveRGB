@@ -41,19 +41,33 @@ namespace WaveRGB
             birthDelay = RingPrefs.delay[source];
         }
 
-        public Canvas GetCircCanvas()
+        public Canvas GetCircCanvas(bool lineOnly)
         {
             Canvas circCanvas = new Canvas();
             if (currentLife > birthDelay)
             {
+
                 Ellipse myCircle = new Ellipse
                 {
                     Height = radius * 2,
                     Width = radius * 2,
                     StrokeThickness = thickness,
-                    Stroke = new SolidColorBrush(color),   //Brushes.White;
+                    Stroke = new SolidColorBrush(color),   //Brushes.White,
                     Opacity = opacity / 100,
                 };
+
+                if (lineOnly)
+                {
+                    Rect rowClip = new Rect
+                    {
+                        Height = 12,
+                        Width = radius * 2
+                    };
+                    TranslateTransform moveDown = new TranslateTransform(0, radius - 6);
+                    RectangleGeometry rowClipping = new RectangleGeometry(rowClip, 0, 0, moveDown);
+                    myCircle.Clip = rowClipping;
+                }
+
                 circCanvas.Children.Add(myCircle);
                 Canvas.SetLeft(circCanvas, center.X - radius);
                 Canvas.SetTop(circCanvas, center.Y - radius);
